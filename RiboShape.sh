@@ -60,3 +60,77 @@ echo finish gzip ${sample[$i-1]} at `date`
 echo finish remove rRNA ${sample[$i-1]} `date`
 done
 echo finish all remove rRNA at `date`
+
+echo start mapping at `date`
+for i in $(seq 1 ${#samples[@]});do
+mkdir -p your_output_dir/4.mapping/${sample[$i-1]}
+cd your_output_dir/4.mapping/${sample[$i-1]}
+STAR \
+--runThreadN 8 \
+--limitBAMsortRAM 60000000000 \
+--outFilterType BySJout \
+--outFilterMismatchNmax 10  \
+--genomeDir your_dir/genome \
+--readFilesIn your_output_dir//3.remove_rRNA/fastq/${sample[$i-1]}/${sample[$i-1]}.rm_rRNA_1.fq.gz \
+your_output_dir//3.remove_rRNA/fastq/${sample[$i-1]}/${sample[$i-1]}.rm_rRNA_2.fq.gz \
+--readFilesCommand 'zcat' \
+--outFileNamePrefix  ${sample[$i-1]} \
+--outSAMtype BAM Unsorted \
+--quantMode TranscriptomeSAM GeneCounts \
+--outSAMattributes All  --outSAMstrandField intronMotif --outBAMcompression 6 --outReadsUnmapped Fastx
+echo finish mapping ${sample[$i-1]} at `date`
+
+samtools sort -T \
+your_output_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}_Aligned.out.sorted \
+-o your_output_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}_Aligned.sortedByCoord.out.bam \
+your_output_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}_Aligned.out.bam
+
+samtools sort -T \
+your_output_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}_Aligned.toTranscriptome.out.sorted \
+-o your_output_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}_Aligned.toTranscriptome.out.sorted.bam \
+your_output_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}_Aligned.toTranscriptome.out.bam
+
+samtools index \
+your_output_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}_Aligned.sortedByCoord.out.bam
+
+samtools index \
+your_output_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}_Aligned.toTranscriptome.out.sorted.bam
+
+echo finish samtool ${sample[$i-1]} at `date`
+done
+echo finish all mapping at `date`
+
+echo start counting at `date`
+for i in $(seq 1 ${#samples[@]});do
+mkdir -p your_output_dir/5.read_counts/${sample[$i-1]}
+cd your_output_dir/5.read_counts/${sample[$i-1]}
+
+featureCounts \
+-T 8 \
+-s 0 \
+-p -t CDS \
+-g gene_id \
+-a your_dir/Arabidopsis_thaliana.TAIR10.34.gtf \
+-o your_output_dir/5.read_counts/${sample[$i-1]}/${sample[$i-1]}_featurecounts.txt \
+your_output_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}_Aligned.sortedByCoord.out.bam
+
+featureCounts \
+-T 8 \
+-s 0 \
+-p -t exon \
+-g gene_id \
+-a your_dir/Arabidopsis_thaliana.TAIR10.34.gtf \
+-o your_output_dir/5.read_counts/${sample[$i-1]}/${sample[$i-1]}_featurecounts.all.txt \
+your_output_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}_Aligned.sortedByCoord.out.bam
+
+mkdir -p your_output_dir/5.read_counts/result/${sample[$i-1]}
+cd your_output_dir/5.read_counts/result/${sample[$i-1]}
+echo -e "gene_id	${sample[$i-1]}" >your_output_dir/5.read_counts/result/${sample[$i-1]}.txt
+cat your_output_dir/5.read_counts/${sample[$i-1]}/${sample[$i-1]}_featurecounts.txt| grep -v '#' | grep -v 'Geneid' | cut -f 1,7 >> your_output_dir/5.read_counts/result/${sample[$i-1]}.txt
+
+echo -e "gene_id	${sample[$i-1]}" >your_output_dir/5.read_counts/result/${sample[$i-1]}.all.txt
+cat your_output_dir/5.read_counts/${sample[$i-1]}/${sample[$i-1]}_featurecounts.all.txt| grep -v '#' | grep -v 'Geneid' | cut -f 1,7 >> your_output_dir/5.read_counts/result/${sample[$i-1]}.all.txt
+
+echo finish counting ${sample[$i-1]} at `date`
+done 
+echo finish all counting at `date`
