@@ -134,3 +134,13 @@ cat your_output_dir/5.read_counts/${sample[$i-1]}/${sample[$i-1]}_featurecounts.
 echo finish counting ${sample[$i-1]} at `date`
 done 
 echo finish all counting at `date`
+
+echo start merge counting at `date`
+for i in $(seq 1 ${#samples[@]});do
+mkdir -p your_output_dir/6.mergeCount
+python your_dir/mergeCount.py
+echo finish merge counting ${sample[$i-1]} at `date`
+done
+echo finish merge counting at `date`
+
+
