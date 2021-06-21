@@ -75,13 +75,30 @@ STAR \
 #your_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.out.bam
 
 samtools sort -T \
-your_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.toTranscriptome.out.sorted \
--o your_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.toTranscriptome.out.sorted.bam \
-your_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.toTranscriptome.out.bam
+your__output_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.toTranscriptome.out.sorted \
+-o your_output_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.toTranscriptome.out.sorted.bam \
+your_output_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.toTranscriptome.out.bam
 
-samtools index your_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.toTranscriptome.out.sorted.bam \
-samtools index your_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.sortedByCoord.out.bam
+samtools index your_output_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.toTranscriptome.out.sorted.bam \
+samtools index your_output_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.sortedByCoord.out.bam
 
 echo finish mapping ${sample[$i-1]} at `date`
 done
 echo finish mapping at `date`
+
+
+echo start read_counts `date`
+for i in $(seq 1 ${#sample[@]});do
+echo start counting ${sample[$i-1]} at `date`
+mkdir -p your_output_dir/5.read_count_HTSeq/${sample[$i-1]}
+cd your_output_dir/5.read_count_HTSeq/${sample[$i-1]}
+
+htseq-count -f bam -s no -i gene_id -t CDS -m union \
+your_output_dir//4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.sortedByCoord.out.bam \
+your_dir/GTF/Arabidopsis_thaliana.TAIR10.34.gtf >your_output_dir/5.read_count_HTSeq/${sample[$i-1]}/${sample[$i-1]}.read_count.HTSeq.txt
+
+grep __ your_output_dir/5.read_count_HTSeq/${sample[$i-1]}/${sample[$i-1]}.read_count.HTSeq.txt >your_output_dir/5.read_count_HTSeq/${sample[$i-1]}/${sample[$i-1]}.read_count.HTSeq.txt.summary
+sed -i '/^__/d' your_output_dir/5.read_count_HTSeq/${sample[$i-1]}/${sample[$i-1]}.read_count.HTSeq.txt
+echo finish counting ${sample[$i-1]} at `date`
+done
+echo finish count at `date`
