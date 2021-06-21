@@ -70,20 +70,18 @@ STAR \
 --outReadsUnmapped Fastx
 
 #samtools sort -T \
-#/data/TA_QUIZ_RNA_regulation/result/PartII.Ribo-seq/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.out.sorted \
-#-o /data/TA_QUIZ_RNA_regulation/result/PartII.Ribo-seq/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.sortedByCoord.out.bam \
-#/data/TA_QUIZ_RNA_regulation/result/PartII.Ribo-seq/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.out.bam
+#your_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.out.sorted \
+#-o your_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.sortedByCoord.out.bam \
+#your_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.out.bam
 
 samtools sort -T \
-/data/mo/Ribo-seq/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.toTranscriptome.out.sorted \
--o /data/mo/Ribo-seq/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.toTranscriptome.out.sorted.bam \
-/data/mo/Ribo-seq/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.toTranscriptome.out.bam
+your_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.toTranscriptome.out.sorted \
+-o your_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.toTranscriptome.out.sorted.bam \
+your_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.toTranscriptome.out.bam
 
-samtools index /data/mo/Ribo-seq/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.toTranscriptome.out.sorted.bam \
+samtools index your_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.toTranscriptome.out.sorted.bam \
+samtools index your_dir/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.sortedByCoord.out.bam
 
-samtools index /data/mo/Ribo-seq/4.mapping/${sample[$i-1]}/${sample[$i-1]}.Aligned.sortedByCoord.out.bam
-
-echo finish ${sample[$i-1]} `date`
+echo finish mapping ${sample[$i-1]} at `date`
 done
-
-echo mapping success `date`
+echo finish mapping at `date`
