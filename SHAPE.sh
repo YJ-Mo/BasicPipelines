@@ -3,20 +3,22 @@
 #SBATCH -p 
 #SBATCH --nodes=
 #SBATCH --ntasks=
-#SBATCH --output=/shape.0.map.out
-#SBATCH --error=/shape.0.map.err
+#SBATCH --output=your_dir/log.out
+#SBATCH --error=your_dir/log.err
 
-export PATH=/data/zhaoyizi/software/anaconda3/envs/Riboshape/bin:/data/liuxiaofan/software/shapemap/:$PATH
-cd /data/mo/SHAPE
+export PATH=your_envs_dir:$PATH
 
-/data/liuxiaofan/software/shapemap/shapemapper \
---target /data/TA_QUIZ_RNA_regulation/data/test/Arabidopsis_thaliana.TAIR10.34.transcripts_new_2.fa \
---name "C1_1" \
+echo start calculating transcripts activity
+your_software_dir/shapemap/shapemapper \
+--target your_dir/ref.fa \.  # transcripts references fasta
+--name sample_name \
 --min-depth 100 \
 --min-qual-to-count 20 \
 --overwrite \
---modified --folder /data/TA_QUIZ_RNA_regulation/data/test/modified  \
---untreated --folder /data/TA_QUIZ_RNA_regulation/data/test/control \
+--modified --folder your_dir/  \
+--untreated --folder your_dir/ \
 --star-aligner \
 --nproc 8 \
 --verbose
+
+echo
