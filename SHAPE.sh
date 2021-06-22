@@ -31,13 +31,14 @@ path0=your_dir/ # dir containing hit_level.py
 path1=your_dir/ # dir containing .hit files
 path2=your_output_dir
 
-## 注意，这里的输入文件是final.modified_unmodified而非final.modified_unmodified.hit
+## input path of folder containing .hit instead of path of .hit
+#  output path of output .hit instead of path of folder containing it
 python $path0/hit_level.py \
 --data_path $path1/final.modified_unmodified \
 --savepath_hit $path2/final.modified_unmodified.hit
-echo finish python script `date`
+echo finish hit_level.py at `date`
 
-echo -e "cutoff\ttranscript_id\tmodified_depth_median\tunmodified_depth_median\tmodified_depth_sum\tunmodified_depth_sum\thit"       >       $path2/cutoff.hit.group;
+echo -e "cutoff\ttranscript_id\tmodified_depth_median\tunmodified_depth_median\tmodified_depth_sum\tunmodified_depth_sum\thit"  >   $path2/cutoff.hit.group;
 awk -F '\t' '$3>0 && $2<=25 && $2>0{print "0\t"$0}'     $path2/final.modified_unmodified.hit  >>        $path2/cutoff.hit.group;
 awk -F '\t' '$3>0 && $2<=50 && $2 > 25{print "25\t"$0}' $path2/final.modified_unmodified.hit  >>        $path2/cutoff.hit.group;
 awk -F '\t' '$3>0 && $2<=100 && $2 > 50{print "50\t"$0}' $path2/final.modified_unmodified.hit >>      $path2/cutoff.hit.group;
@@ -49,5 +50,4 @@ awk -F '\t' '$3>0 && $2<=1000 && $2 >750{print "750\t"$0}' $path2/final.modified
 awk -F '\t' '$3>0 && $2<=2000 && $2 >1000{print "1000\t"$0}' $path2/final.modified_unmodified.hit >>      $path2/cutoff.hit.group;
 awk -F '\t' '$3>0 && $2<=5000 && $2 >2000{print "2000\t"$0}' $path2/final.modified_unmodified.hit >>      $path2/cutoff.hit.group;
 awk -F '\t' '$3>0 && $2 > 5000{print "5000\t"$0}' $path2/final.modified_unmodified.hit >>      $path2/cutoff.hit.group;
-
-echo finish hit.group
+echo finish hit.group at `date`
