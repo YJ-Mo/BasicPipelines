@@ -24,7 +24,6 @@ gtf_data_new = gtf_data_new.drop_duplicates()
 gtf_data_new.index = range(len(gtf_data_new))
 
 ##  extract data info from data
-
 hit_level_col_uv_f = pd.read_csv(col_uv_f_path+'/cutoff.hit.group',sep='\t')
 hit_level_col_uv_f.columns =['group','transcript_id','modified.median','unmodified.median','modified.sum','unmodified.sum','hit']
 hit_level_col_uv_f = pd.merge(hit_level_col_uv_f,gtf_data_new,on='transcript_id',how='left')
