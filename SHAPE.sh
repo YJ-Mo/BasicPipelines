@@ -51,3 +51,7 @@ awk -F '\t' '$3>0 && $2<=2000 && $2 >1000{print "1000\t"$0}' $path2/final.modifi
 awk -F '\t' '$3>0 && $2<=5000 && $2 >2000{print "2000\t"$0}' $path2/final.modified_unmodified.hit >>      $path2/cutoff.hit.group;
 awk -F '\t' '$3>0 && $2 > 5000{print "5000\t"$0}' $path2/final.modified_unmodified.hit >>      $path2/cutoff.hit.group;
 echo finish hit.group at `date`
+
+echo start normalization at `date`
+python your_dir/shape_3_norm.py
+echo finish normalizarion at `date`
