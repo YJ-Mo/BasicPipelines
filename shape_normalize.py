@@ -1,12 +1,14 @@
 import numpy as np
 import pandas as pd
 import re
-import seaborn as sns
-import matplotlib.pyplot as plt
 from numpy import median
 from numba import jit
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-#########转录本注释和数据读入#################
+##转录本注释和数据读入
 #### path #####
 exon_gtf_path='/data/TA_QUIZ_RNA_regulation/data/ATH/GTF/shape_map/ath_exons.gtf'
 col_uv_f_path='/data/TA_QUIZ_RNA_regulation/data/riboshape_liulab_batch4/final.modified_umodified/col_nouv/'
