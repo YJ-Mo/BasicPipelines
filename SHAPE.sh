@@ -53,5 +53,5 @@ awk -F '\t' '$3>0 && $2 > 5000{print "5000\t"$0}' $path2/final.modified_unmodifi
 echo finish hit.group at `date`
 
 echo start normalization at `date`
-python your_dir/shape_3_norm.py
+python your_dir/shape_normalize.py
 echo finish normalizarion at `date`
