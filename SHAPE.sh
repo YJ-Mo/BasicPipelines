@@ -57,3 +57,8 @@ mkdir -p your_output_dir/final.modified_umodified/col_nouv/
 mkdir -p your_output_dir/final.modified_umodified/col_uv/
 python your_dir/shape_normalize.py
 echo finish normalizarion at `date`
+
+echo start calculating gini
+python your_dir/gini.py
+echo finish calculating gini
+
