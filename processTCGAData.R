@@ -12,3 +12,4 @@ for (i in files[2:length(files)]){
     print(ncol(count)/length(files))
 }
 write.table(count,paste("/home/user_25/cancer/rawData/TCGA/",seq,"/counts.txt",sep=""),sep='\t',quote=F,row.names=F)
+}
