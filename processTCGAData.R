@@ -39,3 +39,5 @@ for (i in 2:length(seq)){
     all_count=cbind(all_count,c)
     all_label=rbind(all_label,l)
 }
+write.table(all_count,"/home/user_25/cancer/rawData/TCGA/count.txt",quote=F)
+wrute.table(all_label,"/home/user_25/cancer/rawData/TCGA/label.txt",quote=F,row.names=F)
